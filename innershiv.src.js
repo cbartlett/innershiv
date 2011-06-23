@@ -22,7 +22,8 @@ window.innerShiv = (function () {
 	
 	return function (
 		html, /* string */
-		returnFrag /* optional false bool */
+		returnFrag, /* optional false bool */
+		stripScripts /* optional false bool */
 	) {
 		if (!div) {
 			div = doc.createElement('div');
@@ -45,14 +46,13 @@ window.innerShiv = (function () {
 			}
 		}
 		
-		html = html
-			// Trim whitespace to avoid unexpected text nodes in return data:
-			.replace(/^\s\s*/, '').replace(/\s\s*$/, '')
-			// Strip any scripts:
-			.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-			// Fix misuses of self-closing tags:
-			.replace(/(<([\w:]+)[^>]*?)\/>/g, fcloseTag)
-			;
+		// Trim whitespace to avoid unexpected text nodes in return data:
+		html = html.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+		// Strip any scripts:
+		if (stripScripts !== false)
+			html = html.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
+		// Fix misuses of self-closing tags:
+		html = html.replace(/(<([\w:]+)[^>]*?)\/>/g, fcloseTag);
 		
 		// Fix for using innerHTML in a table
 		var tabled;
