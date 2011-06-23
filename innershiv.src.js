@@ -1,3 +1,17 @@
+/*
+* jquery.innershiv: Fixes HTML5 compatibility for jQuery's ajax calls.
+* It seamlessly combines the innershiv script with jQuery ajax methods.
+* No changes need to be made to your jQuery calls.
+* Credit goes to the original idea here: http://tomcoote.co.uk/javascript/ajax-html5-in-ie/
+*/
+jQuery && jQuery.ajaxSetup({
+	dataFilter: function(data, dataType) {
+		return (dataType === 'html')
+			? innerShiv(data, false, false)
+			: data;
+	}
+});
+
 /* innerShiv: makes HTML5shim work on innerHTML & jQuery
  * http://jdbartlett.github.com/innershiv
  *
